@@ -1,10 +1,13 @@
 import React from 'react'
+import Header from './Header'
+import AutoCarousel from './AutoCarousel'
 
 const Home = () => {
   return (
-    <>
-    <div>hai</div>
-    </>
+   <div>
+    <Header />
+    <AutoCarousel/>
+   </div>
   )
 }
 

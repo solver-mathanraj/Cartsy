@@ -1,0 +1,63 @@
+.form-control {
+  outline: none !important;
+  box-shadow: 0 0 3px #aaa;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.form-control:focus {
+  outline: none; /* Removes blue outline */
+  border-color: rgb(255, 104, 108); /* Optional: Add your own border color */
+  box-shadow: none;
+}
+
+.logo {
+  object-fit: cover;
+  height: 50px;
+  width: 150px;
+}
+
+.bi-search {
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+.search-input {
+  position: relative;
+}
+
+.search-input input {
+  padding-right: 4rem;
+}
+
+.search-input i {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  cursor: pointer; /* Hover cursor */
+  transition: color 0.2s ease;
+}
+
+.search-input i:hover {
+  color: #000; /* Optional: darker on hover */
+}
+
+.btn-outline-primary {
+  border-color: rgb(255, 104, 108);
+  color: rgb(255, 104, 108);
+  margin: 0px 1rem;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active {
+  background-color: rgb(255, 104, 108) !important;
+  outline: none !important;
+  border-color: rgb(255, 104, 108) !important;
+}
+
