@@ -14,12 +14,16 @@ const Api = ({ children }) => {
     }
   }
 
-  async function fetchAllData() {
+  async function fetchCategory(category) {
     try {
-      const response = await axios.get("https://dummyjson.com/products/");
+      const response = await axios.get(
+        `https://dummyjson.com/products/category/${category}?limit=5`
+      );
       return response.data.products;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      if(!response.data.products){
+        console.error("Error fetching data:", error);
+      }
     }
   }
 
@@ -35,7 +39,9 @@ const Api = ({ children }) => {
   }
   return (
     <div>
-      <ServiceContext.Provider value={{ searchData, fetchAllData,fetchTitle}}>
+      <ServiceContext.Provider
+        value={{ searchData, fetchCategory, fetchTitle }}
+      >
         {children}
       </ServiceContext.Provider>
     </div>

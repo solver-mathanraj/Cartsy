@@ -3,7 +3,7 @@ import "../css/Header.css";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; 
 import { useService } from "../context/ServiceContext";
 
-const header = () => {
+const Header = () => {
   const [cart, setCart] = useState(0);
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -211,7 +211,7 @@ const header = () => {
               <div
                 key={index}
                 className="p-2 px-4 border rounded flex-shrink-0"
-                style={{ whiteSpace: "nowrap" }}
+                style={{ whiteSpace: "nowrap",cursor:'pointer' }}
               >
                 {category}
               </div>
@@ -235,4 +235,4 @@ const header = () => {
   );
 };
 
-export default header;
+export default Header;

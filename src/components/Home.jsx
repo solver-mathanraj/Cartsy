@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from './Header.jsx'
 import AutoCarousel from './AutoCarousel'
+import ProductDisplay from './ProductDisplay.jsx'
 
 
 const Home = () => {
@@ -8,7 +9,7 @@ const Home = () => {
    <div>
     <Header />
     <AutoCarousel/>
-    
+    <ProductDisplay/>
    </div>
   )
 }
