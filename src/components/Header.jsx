@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../css/Header.css";
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; 
 import { useService } from "../context/ServiceContext";
 
 const header = () => {
@@ -8,8 +9,9 @@ const header = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState("");
   const [small, setSmall] = useState(true);
+  const [title, setTitle] = useState([]);
 
-  const { searchData } = useService();
+  const { searchData, fetchTitle } = useService();
 
   const [allData, setAllData] = useState([]);
 
@@ -17,6 +19,7 @@ const header = () => {
     if (search == "") {
       setShowOptions(false);
     }
+
     const handleResize = () => {
       if (window.innerWidth <= 576) {
         setSmall(true); // or any value you want
@@ -25,26 +28,54 @@ const header = () => {
       }
     };
 
-    // Call on component mount
     handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, [search]);
+
+  useEffect(() => {
+    getTitle();
+  }, []);
+
   const getAlldata = async () => {
-    const res = await searchData(search);
-    setAllData(res);
-    if (res && res.length) {
-      res.forEach((data) => {});
+    try {
+      const res = await searchData(search);
+      setAllData(res);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  const getTitle = async () => {
+    try {
+      const res = await fetchTitle();
+      setTitle(res);
+    } catch (error) {
+      console.log(error);
+    }
+    // if (res && res.length) {
+    //   res.forEach((data) => {});
+    // }
   };
   const handleSelect = (value, title) => {
     setSelected(value);
     setSearch(title); // Set input box to selected title
     setShowOptions(false);
+  };
+
+  const scrollRef = useRef(null);
+  const itemsPerSlide = 3;
+
+  const handleScroll = (direction) => {
+    const container = scrollRef.current;
+    const itemWidth = container.children[0]?.offsetWidth || 0; // Get width of an item
+    const scrollAmount = itemWidth * itemsPerSlide;
+
+    if (direction === "left") {
+      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else if (direction === "right") {
+      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
   };
 
   return (
@@ -90,7 +121,7 @@ const header = () => {
               {allData.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => handleSelect(item.value, item.title)}
+                  onClick={() => handleSelect(item.id, item.title)}
                   style={{
                     padding: "8px",
                     cursor: "pointer",
@@ -154,6 +185,52 @@ const header = () => {
           ))}
         </div>
       )}
+
+      <div className="position-relative">
+        {/* Previous Button */}
+        <button
+          className="position-absolute top-50 start-0 translate-middle-y z-1"
+          style={{
+            background: "white",
+            border: "none",
+            color: "rgb(255, 104, 108)",
+          }}
+          onClick={() => handleScroll("left")}
+        >
+          <ChevronLeft size={24} /> {/* Bootstrap Icon */}
+        </button>
+
+        {/* Scrollable Container */}
+        <div
+          className="d-flex align-items-center gap-2 overflow-hidden my-2 px-5"
+          ref={scrollRef}
+          style={{ scrollBehavior: "smooth" }}
+        >
+          {title &&
+            title.map((category, index) => (
+              <div
+                key={index}
+                className="p-2 px-4 border rounded flex-shrink-0"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {category}
+              </div>
+            ))}
+        </div>
+
+        {/* Next Button */}
+        <button
+          className="position-absolute top-50 end-0 translate-middle-y z-1"
+          style={{
+            background: "white",
+            border: "none",
+            color: "rgb(255, 104, 108)",
+          }}
+          onClick={() => handleScroll("right")}
+        >
+          <ChevronRight size={24} /> {/* Bootstrap Icon */}
+        </button>
+      </div>
     </div>
   );
 };
