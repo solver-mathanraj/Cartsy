@@ -3,7 +3,9 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./components/Home";
 import ProductDisplay from "./components/ProductDisplay";
 import Card404 from "./components/Card404";
+import ProductPage from "./components/ProductPage";
 import { useEffect } from "react";
+import CartView from "./components/CartView";
 
 function App() {
   const navigate = useNavigate();
@@ -27,9 +29,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/productDisplay" element={<ProductDisplay />} />
         <Route path="/offline" element={<Card404 />} />
-         <Route path="*" element={<Card404 />}/>
+        <Route path="*" element={<Card404 />} />
+        <Route path="/product" element={<ProductPage />} />
+        <Route path="/viewCart" element={<CartView />} />
+
       </Routes>
-      
     </>
   );
 }

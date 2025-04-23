@@ -1,103 +1,152 @@
 import React, { useEffect, useState } from "react";
 import { useService } from "../context/ServiceContext";
+import { useCart } from "../context/CartContext";
+import Loader from "./Loader";
+import { useNavigate } from "react-router-dom";
+
+const categoriesArray = [
+  ["beauty", ["beauty", "skin-care"]],
+  ["fragrances", ["fragrances"]],
+  ["furniture", ["furniture", "home-decoration"]],
+  ["groceries", ["groceries"]],
+  ["kitchen", ["kitchen-accessories"]],
+  ["electronics", ["laptops", "smartphones", "tablets", "mobile-accessories"]],
+  ["mens", ["mens-shirts", "mens-shoes", "mens-watches"]],
+  [
+    "womens",
+    [
+      "womens-bags",
+      "womens-dresses",
+      "womens-jewellery",
+      "womens-shoes",
+      "womens-watches",
+    ],
+  ],
+  ["sports", ["sports-accessories"]],
+  ["eyewear", ["sunglasses"]],
+  ["vehicles", ["motorcycle", "vehicle"]],
+];
+
+const ProductCard = ({ product, onClick, onAddToCart }) => (
+  <div
+    style={{
+      padding: "8px",
+      width: "200px",
+      height: "280px",
+      overflow: "auto",
+    }}
+  >
+    <img
+      src={product.thumbnail}
+      alt={product.title}
+      onClick={onClick}
+      className="img-fluid"
+      style={{
+        width: "100%",
+        height: "150px",
+        objectFit: "cover",
+        cursor: "pointer",
+      }}
+    />
+    <div>
+      <p style={{ height: "40px" }}>{product.title}</p>
+      <button
+        onClick={onAddToCart}
+        className="btn btn-outline-primary text-center"
+      >
+        Add to cart
+      </button>
+    </div>
+  </div>
+);
 
 const ProductDisplay = () => {
   const { fetchCategory } = useService();
+  const { addToCart } = useCart();
+  const [allProducts, setAllProducts] = useState({});
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const [allData, setAllData] = useState({});
-
-  const categoriesArray = [
-    ["beauty", ["beauty", "skin-care"]],
-    ["fragrances", ["fragrances"]],
-    ["furniture", ["furniture", "home-decoration"]],
-    ["groceries", ["groceries"]],
-    ["kitchen", ["kitchen-accessories"]],
-    [
-      "electronics",
-      ["laptops", "smartphones", "tablets", "mobile-accessories"],
-    ],
-    ["mens", ["mens-shirts", "mens-shoes", "mens-watches"]],
-    [
-      "womens",
-      [
-        "womens-bags",
-        "womens-dresses",
-        "womens-jewellery",
-        "womens-shoes",
-        "womens-watches",
-      ],
-    ],
-    ["sports", ["sports-accessories"]],
-    ["eyewear", ["sunglasses"]],
-    ["vehicles", ["motorcycle", "vehicle"]],
-  ];
+  const handleNavigate = (id, title) => {
+    navigate("/product", { state: { id, title } });
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const dataMap = {};
+    const fetchAllProducts = async () => {
+      try {
+        const dataMap = {};
 
-      for (const [categoryName, subcategories] of categoriesArray) {
-        let categoryProducts = [];
+        await Promise.all(
+          categoriesArray.map(async ([categoryName, subcategories]) => {
+            const results = await Promise.all(
+              subcategories.map((sub) =>
+                fetchCategory(sub).catch((err) => {
+                  console.error(`Error fetching ${sub}:`, err);
+                  return [];
+                })
+              )
+            );
+            dataMap[categoryName] = results.flat();
+          })
+        );
 
-        for (const sub of subcategories) {
-          try {
-            const response = await fetchCategory(sub);
-            if (response) {
-              categoryProducts.push(...response);
-            }
-          } catch (error) {
-            console.error(`Error fetching ${sub}:`, error);
-          }
-        }
-
-        dataMap[categoryName] = categoryProducts;
+        setAllProducts(dataMap);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoading(false);
       }
-
-      setAllData(dataMap);
     };
 
-    fetchData();
+    fetchAllProducts();
   }, []);
 
+  if (loading) return (
+    <div className=" min-vw-100 d-flex  justify-content-center align-items-center">
+      <Loader />
+    </div>
+  );
 
   return (
     <div>
-      {categoriesArray.map(([categoryName], index) => (
+      {categoriesArray.map(([categoryName]) => (
         <div
-          key={index}
+          key={categoryName}
           className="mx-2 my-4 overflow-hidden"
           style={{ height: "330px" }}
         >
           <h3 className="ms-3">{categoryName.toUpperCase()}</h3>
           <div
-            className="product-grid"
-            style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}
+            className="productss-grid"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "16px",
+              justifyContent: "space-evenly",
+              border: "none",
+            }}
           >
-            {allData[categoryName]?.map((product, i) => (
-              <div
-                key={i}
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "8px",
-                  width: "200px",
-                  height: "280px",
-                  overflow: "auto",
-                }}
-              >
-                <img
-                  src={product.thumbnail}
-                  alt="Responsive image"
-                  className="img-fluid"
-                  style={{ width: "100%", height: "150px", objectFit: "cover" }}
+            {allProducts[categoryName]?.length ? (
+              allProducts[categoryName].map((product, i) => (
+                <ProductCard
+                  key={i}
+                  product={product}
+                  onClick={() => handleNavigate(product.id, product.title)}
+                  onAddToCart={() =>
+                    addToCart(
+                      product.id,
+                      product.title,
+                      product.price,
+                      product.discountPercentage,
+                      product.thumbnail,
+                      product.stock
+                    )
+                  }
                 />
-                <div>
-                  <p style={{height:'40px'}}>{product.title}</p>
-                  <button className="btn btn-outline-primary">
-                    Add to cart
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No products found</p>
+            )}
           </div>
         </div>
       ))}

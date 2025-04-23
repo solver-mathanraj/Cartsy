@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../css/Header.css";
-import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; 
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
 import { useService } from "../context/ServiceContext";
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const [cart, setCart] = useState(0);
+  const { cart,addToCart } = useCart();
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState("");
@@ -14,7 +16,7 @@ const Header = () => {
   const { searchData, fetchTitle } = useService();
 
   const [allData, setAllData] = useState([]);
-
+ const navigate = useNavigate()
   useEffect(() => {
     if (search == "") {
       setShowOptions(false);
@@ -134,9 +136,8 @@ const Header = () => {
             </div>
           )}
         </div>
-        <button className="btn btn-outline-primary">
-          {" "}
-          cart {cart == 0 ? "" : cart}
+        <button className="btn btn-outline-primary" onClick={()=>{navigate('/viewCart')}}>
+          <i className="bi bi-cart"></i>  cart {cart.length == 0 ? "" : cart.length}
         </button>
       </div>
 
@@ -173,7 +174,7 @@ const Header = () => {
           {allData.map((item) => (
             <div
               key={item.id}
-              onClick={() => handleSelect(item.value, item.title)}
+              onClick={() => handleSelect(item.id, item.title)}
               style={{
                 padding: "8px",
                 cursor: "pointer",
@@ -211,7 +212,7 @@ const Header = () => {
               <div
                 key={index}
                 className="p-2 px-4 border rounded flex-shrink-0"
-                style={{ whiteSpace: "nowrap",cursor:'pointer' }}
+                style={{ whiteSpace: "nowrap", cursor: "pointer" }}
               >
                 {category}
               </div>

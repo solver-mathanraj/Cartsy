@@ -2,6 +2,7 @@ import React from 'react'
 import Header from './Header.jsx'
 import AutoCarousel from './AutoCarousel'
 import ProductDisplay from './ProductDisplay.jsx'
+import Footer from './Footer.jsx'
 
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
     <Header />
     <AutoCarousel/>
     <ProductDisplay/>
+    <Footer/>
    </div>
   )
 }
