@@ -37,10 +37,23 @@ const Api = ({ children }) => {
       console.error("Error fetching data:", error);
     }
   }
+
+  async function fetchSearch() {
+    try {
+      const response = await axios.get(
+        "https://dummyjson.com/products/category-list"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+
   return (
     <div>
       <ServiceContext.Provider
-        value={{ searchData, fetchCategory, fetchTitle }}
+        value={{ searchData, fetchCategory,fetchSearch, fetchTitle }}
       >
         {children}
       </ServiceContext.Provider>

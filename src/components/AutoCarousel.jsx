@@ -3,12 +3,12 @@ import "../css/AutoCarousel.css";
 
 const AutoCarousel = () => {
   const images = [
-    "src/assets/images/banners/banner_1.webp",
-    "src/assets/images/banners/banner_2.png",
-    "src/assets/images/banners/banner_3.png",
-    "src/assets/images/banners/banner_4.png",
-    "src/assets/images/banners/banner_5.png",
-    "src/assets/images/banners/banner_6.webp",
+    "/banners/banner_1.webp",
+    "/banners/banner_2.png",
+    "/banners/banner_3.png",
+    "/banners/banner_4.png",
+    "/banners/banner_5.png",
+    "/banners/banner_6.webp",
    
   ];
 
