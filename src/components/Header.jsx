@@ -258,7 +258,7 @@ const Header = () => {
               <div
                 key={index}
                 className="p-2 px-4 border rounded flex-shrink-0"
-                style={{ whiteSpace: "nowrap", cursor: "pointer" }}
+                style={{ whiteSpace: "nowrap", cursor: "pointer",userSelect:'none' }}
                 onClick={()=>{goToSearchByCategory(category)}}
               >
                 {category}
