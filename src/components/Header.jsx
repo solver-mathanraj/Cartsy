@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const { cart,addToCart } = useCart();
+  const { cart } = useCart();
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState("");
@@ -59,9 +59,10 @@ const Header = () => {
     //   res.forEach((data) => {});
     // }
   };
-  const handleSelect = (value, title) => {
-    setSelected(value);
-    setSearch(title); // Set input box to selected title
+  const handleSelect = (item) => {
+    setSelected(item.id);
+    setSearch(item.title); 
+    navigate("/searchViewProduct", { state:{item} });
     setShowOptions(false);
   };
 
@@ -123,7 +124,7 @@ const Header = () => {
               {allData.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => handleSelect(item.id, item.title)}
+                  onClick={() => handleSelect(item)}
                   style={{
                     padding: "8px",
                     cursor: "pointer",
@@ -174,7 +175,7 @@ const Header = () => {
           {allData.map((item) => (
             <div
               key={item.id}
-              onClick={() => handleSelect(item.id, item.title)}
+              onClick={() => handleSelect(item)}
               style={{
                 padding: "8px",
                 cursor: "pointer",

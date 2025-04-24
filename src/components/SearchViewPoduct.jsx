@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./Header";
-import axios from "axios";
 import { Container, Row, Col, Image, ListGroup, Card } from "react-bootstrap";
 import Loader from "./Loader";
 import { useCart } from "../context/CartContext";
 
-const ProductPage = () => {
+const SearchViewProduct = () => {
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -15,17 +14,12 @@ const ProductPage = () => {
 
   const userData = location.state;
   useEffect(() => {
-    const getProduct = async () => {
-      axios.get(`https://dummyjson.com/products/${userData.id}`).then((res) => {
-        setProduct(res.data);
+    setProduct(userData.item);
 
-        setSelectedImage(res.data?.images[0]);
-      });
-    };
-    getProduct();
+    setSelectedImage(userData?.item.images[0]);
 
-    document.title = userData.title;
-  }, [userData.id]);
+    document.title = userData.item.title;
+  }, [userData.item.id]);
 
   if (!product)
     return (
@@ -149,4 +143,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default SearchViewProduct;

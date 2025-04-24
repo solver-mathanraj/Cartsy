@@ -119,7 +119,7 @@ const Loader = () => {
             fill="#000000"
             className="lampPost"
           >
-            <path d="..." />
+            {/* <path d="..." /> */}
           </svg>
         </div>
       </div>

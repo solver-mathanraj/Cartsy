@@ -6,6 +6,7 @@ import Card404 from "./components/Card404";
 import ProductPage from "./components/ProductPage";
 import { useEffect } from "react";
 import CartView from "./components/CartView";
+import SearchViewProduct from "./components/SearchViewPoduct";
 
 function App() {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ function App() {
         <Route path="*" element={<Card404 />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/viewCart" element={<CartView />} />
+        <Route path="/searchViewProduct" element={<SearchViewProduct/>} />
+
 
       </Routes>
     </>

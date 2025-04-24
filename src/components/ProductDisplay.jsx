@@ -3,6 +3,7 @@ import { useService } from "../context/ServiceContext";
 import { useCart } from "../context/CartContext";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
+import AutoCarousel from "./AutoCarousel";
 
 const categoriesArray = [
   ["beauty", ["beauty", "skin-care"]],
@@ -27,6 +28,8 @@ const categoriesArray = [
   ["vehicles", ["motorcycle", "vehicle"]],
 ];
 
+
+  
 const ProductCard = ({ product, onClick, onAddToCart }) => (
   <div
     style={{
@@ -67,9 +70,13 @@ const ProductDisplay = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
+
   const handleNavigate = (id, title) => {
     navigate("/product", { state: { id, title } });
   };
+
+
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -101,14 +108,20 @@ const ProductDisplay = () => {
     fetchAllProducts();
   }, []);
 
+
+
+ 
+
   if (loading) return (
-    <div className=" min-vw-100 d-flex  justify-content-center align-items-center">
+    <div className=" min-vh-100 d-flex  justify-content-center align-items-center">
       <Loader />
     </div>
   );
 
   return (
     <div>
+      {!loading && <AutoCarousel />}
+
       {categoriesArray.map(([categoryName]) => (
         <div
           key={categoryName}

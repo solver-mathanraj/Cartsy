@@ -9,7 +9,7 @@ const CartView = () => {
 
   const totalItems = cart.reduce((total, item) => total + item.count, 0);
   const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.count,
+    (total, item) => total + Math.ceil(item.price) * item.count,
     0
   );
 
@@ -42,7 +42,7 @@ const CartView = () => {
                       Discount: {item.discountPercentage}% | Stock: {item.stock}
                     </p>
                     <p className="card-text text-danger fw-bold">
-                      ₹{item.price}
+                      ₹{Math.ceil(item.price)}
                     </p>
                     <div className="d-flex align-items-center gap-2 mt-2">
                       <button
