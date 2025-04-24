@@ -17,7 +17,7 @@ const Api = ({ children }) => {
   async function fetchCategory(category) {
     try {
       const response = await axios.get(
-        `https://dummyjson.com/products/category/${category}?limit=5`
+        `https://dummyjson.com/products/category/${category}`
       );
       return response.data.products;
     } catch (error) {
@@ -38,22 +38,10 @@ const Api = ({ children }) => {
     }
   }
 
-  async function fetchSearch() {
-    try {
-      const response = await axios.get(
-        "https://dummyjson.com/products/category-list"
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
-
   return (
     <div>
       <ServiceContext.Provider
-        value={{ searchData, fetchCategory,fetchSearch, fetchTitle }}
+        value={{ searchData, fetchCategory, fetchTitle }}
       >
         {children}
       </ServiceContext.Provider>

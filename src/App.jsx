@@ -7,6 +7,8 @@ import ProductPage from "./components/ProductPage";
 import { useEffect } from "react";
 import CartView from "./components/CartView";
 import SearchViewProduct from "./components/SearchViewPoduct";
+import ProductSearch from "./components/ProductSearch";
+
 
 function App() {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ function App() {
         <Route path="/product" element={<ProductPage />} />
         <Route path="/viewCart" element={<CartView />} />
         <Route path="/searchViewProduct" element={<SearchViewProduct/>} />
+        <Route path="/productSearch" element={<ProductSearch/>} />
 
 
       </Routes>

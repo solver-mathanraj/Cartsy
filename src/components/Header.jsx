@@ -9,14 +9,13 @@ const Header = () => {
   const { cart } = useCart();
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
-  const [selected, setSelected] = useState("");
   const [small, setSmall] = useState(true);
   const [title, setTitle] = useState([]);
 
-  const { searchData, fetchTitle } = useService();
+  const { searchData, fetchTitle,fetchCategory } = useService();
 
   const [allData, setAllData] = useState([]);
- const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     if (search == "") {
       setShowOptions(false);
@@ -24,9 +23,9 @@ const Header = () => {
 
     const handleResize = () => {
       if (window.innerWidth <= 576) {
-        setSmall(true); // or any value you want
+        setSmall(true); 
       } else {
-        setSmall(false); // optional reset for larger screens
+        setSmall(false); 
       }
     };
 
@@ -55,14 +54,10 @@ const Header = () => {
     } catch (error) {
       console.log(error);
     }
-    // if (res && res.length) {
-    //   res.forEach((data) => {});
-    // }
   };
   const handleSelect = (item) => {
-    setSelected(item.id);
-    setSearch(item.title); 
-    navigate("/searchViewProduct", { state:{item} });
+    setSearch(item.title);
+    navigate("/searchViewProduct", { state: { item } });
     setShowOptions(false);
   };
 
@@ -80,32 +75,60 @@ const Header = () => {
       container.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
+  const searchProducts = () => {
+    navigate("/productSearch", { state: { query: search } });
+  };
 
+
+  const goToSearchByCategory= async(category)=>{
+   const res = await fetchCategory(category);
+   navigate("/productSearch", { state: { res } });
+  }
+
+  
   return (
-    <div className="container-fluid">
-      <div className="mt-2 d-flex align-items-baseline justify-content-evenly overflow-auto overflow-visible">
+    <div className="container-fluid w-100" >
+      <div className="mt-2 d-flex align-items-baseline justify-content-between justify-content-sm-evenly overflow-auto overflow-visible ">
         <div>
           <img src="/cartsy.png" alt="" className="logo" />
         </div>
         <div
           className="search-input w-50 d-none d-sm-block "
           style={{ position: "relative" }}
+          // onBlur={() => setShowOptions(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
-          <input
-            type="search"
-            name=""
-            className="form-control"
-            placeholder="Search your world"
-            onChange={(e) => {
-              setSearch(e.target.value);
-              getAlldata(e.target.value);
-              setShowOptions(true);
+          <form
+            action=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchProducts();
+              setShowOptions(false)
             }}
-            onFocus={() => setShowOptions(true)}
-            // onBlur={() => setShowOptions(false)}
-            value={search}
-          />
-          <i className="bi bi-search"></i>
+          >
+            <input
+              type="search"
+              name=""
+              className="form-control"
+              placeholder="Search your world"
+              onChange={(e) => {
+                setSearch(e.target.value);
+                getAlldata(e.target.value);
+                setShowOptions(true);
+              }}
+              onFocus={() => setShowOptions(true)}
+              value={search}
+            />
+            <i
+              className="bi bi-search"
+              onClick={() => {
+                searchProducts();
+                setShowOptions(false)
+              }}
+            ></i>
+          </form>
           {!small && showOptions && allData.length > 0 && (
             <div
               style={{
@@ -137,27 +160,48 @@ const Header = () => {
             </div>
           )}
         </div>
-        <button className="btn btn-outline-primary" onClick={()=>{navigate('/viewCart')}}>
-          <i className="bi bi-cart"></i>  cart {cart.length == 0 ? "" : cart.length}
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => {
+            navigate("/viewCart");
+          }}
+        >
+          <i className="bi bi-cart"></i> cart{" "}
+          {cart.length == 0 ? "" : cart.length}
         </button>
       </div>
 
-      <div className="search-input small-dev-search w-100 d-sm-none">
-        <input
-          type="search"
-          name=""
-          className="form-control"
-          placeholder="Search your world"
-          onChange={(e) => {
-            setSearch(e.target.value);
-            getAlldata(e.target.value);
-            setShowOptions(true);
+      <div className="search-input small-dev-search w-100 d-sm-none mt-2">
+        <form
+          action=""
+          onSubmit={(e) => {
+            e.preventDefault();
+            searchProducts();
+            setShowOptions(false)
           }}
-          onFocus={() => setShowOptions(true)}
-          // onBlur={() => setShowOptions(false)}
-          value={search}
-        />
-        <i className="bi bi-search"></i>
+        >
+          <input
+            type="search"
+            name=""
+            className="form-control"
+            placeholder="Search your world"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              getAlldata(e.target.value);
+              setShowOptions(true);
+            }}
+            onFocus={() => setShowOptions(true)}
+            onBlur={() => setShowOptions(false)}
+            value={search}
+          />
+          <i
+            className="bi bi-search"
+            onClick={() => {
+              searchProducts();
+              setShowOptions(false)
+            }}
+          ></i>
+        </form>
       </div>
       {small && showOptions && allData.length > 0 && (
         <div
@@ -169,7 +213,7 @@ const Header = () => {
             position: "absolute",
             width: "100%",
             backgroundColor: "#fff",
-            zIndex: 1,
+            zIndex: 10,
           }}
         >
           {allData.map((item) => (
@@ -180,6 +224,7 @@ const Header = () => {
                 padding: "8px",
                 cursor: "pointer",
                 borderBottom: "1px solid #eee",
+                zIndex: "10",
               }}
             >
               {item.title}
@@ -199,7 +244,7 @@ const Header = () => {
           }}
           onClick={() => handleScroll("left")}
         >
-          <ChevronLeft size={24} /> {/* Bootstrap Icon */}
+          <ChevronLeft size={24} />
         </button>
 
         {/* Scrollable Container */}
@@ -214,6 +259,7 @@ const Header = () => {
                 key={index}
                 className="p-2 px-4 border rounded flex-shrink-0"
                 style={{ whiteSpace: "nowrap", cursor: "pointer" }}
+                onClick={()=>{goToSearchByCategory(category)}}
               >
                 {category}
               </div>

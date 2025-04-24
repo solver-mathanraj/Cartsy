@@ -34,34 +34,75 @@ const ProductCard = ({ product, onClick, onAddToCart }) => (
   <div
     style={{
       padding: "8px",
-      width: "200px",
-      height: "280px",
-      overflow: "auto",
+      width: "250px",
+      minWidth: "200px",
+      height: "300px",
+      overflow: "hidden",
+      border: "1px solid #eee",
+      borderRadius: "8px",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
     }}
   >
     <img
       src={product.thumbnail}
       alt={product.title}
       onClick={onClick}
-      className="img-fluid"
       style={{
         width: "100%",
         height: "150px",
         objectFit: "cover",
+        borderRadius: "6px",
         cursor: "pointer",
       }}
     />
     <div>
-      <p style={{ height: "40px" }}>{product.title}</p>
-      <button
-        onClick={onAddToCart}
-        className="btn btn-outline-primary text-center"
+      <p
+        style={{
+          fontSize: "14px",
+          fontWeight: "bold",
+          margin: "6px 0",
+          height: "38px",
+          overflow: "hidden",
+        }}
       >
-        Add to cart
-      </button>
+        {product.title}
+      </p>
+      <div className="d-flex align-items-center ">
+        <div>
+          <p style={{ fontSize: "13px", margin: "0" }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#2cf304"
+                d="M8 3h10l-1 2h-3.26c.48.58.84 1.26 1.05 2H18l-1 2h-2a5.56 5.56 0 0 1-4.8 4.96V14h-.7l6 7H13l-6-7v-2h2.5c1.76 0 3.22-1.3 3.46-3H7l1-2h4.66C12.1 5.82 10.9 5 9.5 5H7z"
+              />
+            </svg>
+            &nbsp;{Math.ceil(product.price)}
+          </p>
+          <p style={{ fontSize: "13px", margin: "0" }}>
+            ⭐&nbsp;{product.rating}
+          </p>
+          <p style={{ fontSize: "13px", marginBottom: "6px" }}>
+            Stock:&nbsp;{product.stock}
+          </p>
+        </div>
+        <div style={{ display: "grid", placeContent: "center", width: "100%" }}>
+          <button onClick={onAddToCart} className="btn btn-outline-primary">
+            Add&nbsp;to&nbsp;cart
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 );
+
 
 const ProductDisplay = () => {
   const { fetchCategory } = useService();
@@ -107,10 +148,11 @@ const ProductDisplay = () => {
 
     fetchAllProducts();
   }, []);
+ const getCategoryDetails=async (category)=>{
+  const res = await fetchCategory(category);
+   navigate("/productSearch", { state: { res } });
+ }
 
-
-
- 
 
   if (loading) return (
     <div className=" min-vh-100 d-flex  justify-content-center align-items-center">
@@ -126,9 +168,18 @@ const ProductDisplay = () => {
         <div
           key={categoryName}
           className="mx-2 my-4 overflow-hidden"
-          style={{ height: "330px" }}
+          style={{
+            maxHeight: "330px",
+          }}
         >
-          <h3 className="ms-3">{categoryName.toUpperCase()}</h3>
+          <div className="d-flex justify-content-between">
+            <div>
+              <h3 className="ms-3">{categoryName.toUpperCase()}</h3>
+            </div>
+            <div className="text-primary fw-bold me-3" style={{cursor:'pointer'}} onClick={()=>{getCategoryDetails(categoryName);}}>
+              Show more
+            </div>
+          </div>
           <div
             className="productss-grid"
             style={{
