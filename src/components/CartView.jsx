@@ -2,10 +2,12 @@ import React from "react";
 import { useCart } from "../context/CartContext";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Header from "./Header";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const CartView = () => {
   const { cart, removeFromCart, decrementFromCart, incrementFromCart } =
     useCart();
+    const navigate =useNavigate()
 
   const totalItems = cart.reduce((total, item) => total + item.count, 0);
   const totalPrice = cart.reduce(
@@ -83,7 +85,7 @@ const CartView = () => {
                   ₹{totalPrice.toFixed(2)}
                 </strong>
               </p>
-              <button className="btn btn-primary w-100">
+              <button className="btn btn-primary w-100" onClick={()=>{navigate("/paymentPage",{state:totalPrice || 1000})}}>
                 Proceed to Checkout
               </button>
             </div>

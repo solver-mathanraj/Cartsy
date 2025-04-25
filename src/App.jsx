@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import CartView from "./components/CartView";
 import SearchViewProduct from "./components/SearchViewPoduct";
 import ProductSearch from "./components/ProductSearch";
+import PaymentPage from "./components/PaymentPage";
+import { Toaster } from "sonner";
 
 
 function App() {
@@ -35,10 +37,9 @@ function App() {
         <Route path="*" element={<Card404 />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/viewCart" element={<CartView />} />
-        <Route path="/searchViewProduct" element={<SearchViewProduct/>} />
-        <Route path="/productSearch" element={<ProductSearch/>} />
-
-
+        <Route path="/searchViewProduct" element={<SearchViewProduct />} />
+        <Route path="/productSearch" element={<ProductSearch />} />
+        <Route path="/paymentPage" element={<PaymentPage />} />
       </Routes>
     </>
   );
