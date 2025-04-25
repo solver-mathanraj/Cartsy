@@ -176,7 +176,7 @@ const ProductDisplay = () => {
             <div>
               <h3 className="ms-3">{categoryName.toUpperCase()}</h3>
             </div>
-            <div className="text-primary fw-bold me-3" style={{cursor:'pointer'}} onClick={()=>{getCategoryDetails(categoryName);}}>
+            <div className="text-primary fw-bold me-3" style={{cursor:'pointer',userSelect:'none'}} onClick={()=>{getCategoryDetails(categoryName);}}>
               Show more
             </div>
           </div>
