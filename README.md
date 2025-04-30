@@ -1,8 +1,1 @@
-Primary: #0F172A (Rich Blue-Black)
-
-Accent: #22D3EE (Cyan Blue)
-
-Background: #F8FAFC (Ice White)
-
-Text: #111827 (Charcoal)
-#f9f9f9
+![Image](https://github.com/user-attachments/assets/35b41f02-398c-41b8-bd08-6ba3841a5243)
